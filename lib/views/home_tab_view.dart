@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import '../models/student_model.dart';
 import '../services/student_service.dart';
 import 'upload_student_face_view.dart';
+import '../constants/constants.dart'; // Import ApiConstants
 
 class HomeTabView extends StatefulWidget {
   final CameraDescription camera;
@@ -18,6 +19,8 @@ class _HomeTabViewState extends State<HomeTabView> {
   List<Student> _students = [];
   Student? _selectedStudent;
   bool _isLoading = false;
+  bool _showUrlInput = false; // To toggle URL input field
+  final TextEditingController _urlController = TextEditingController();
 
   @override
   void initState() {
@@ -48,7 +51,7 @@ class _HomeTabViewState extends State<HomeTabView> {
         context,
         MaterialPageRoute(
           builder: (context) => UploadStudentFaceView(
-            studentId: _selectedStudent!.id, // Use 'id' from new model
+            studentId: _selectedStudent!.id,
             camera: widget.camera,
           ),
         ),
@@ -60,10 +63,39 @@ class _HomeTabViewState extends State<HomeTabView> {
     }
   }
 
+  void _updateBaseUrl() {
+    if (_urlController.text.isNotEmpty) {
+      ApiConstants.setBaseUrl(_urlController.text);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Base URL updated to: ${_urlController.text}')),
+      );
+      setState(() {
+        _showUrlInput = false;
+        _urlController.clear();
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid URL')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
+      appBar: AppBar(
+        title: const Text('Home'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            onPressed: () {
+              setState(() {
+                _showUrlInput = !_showUrlInput;
+              });
+            },
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -78,8 +110,7 @@ class _HomeTabViewState extends State<HomeTabView> {
                     items: _students.map((Student student) {
                       return DropdownMenuItem<Student>(
                         value: student,
-                        child: Text(
-                            '${student.name} (${student.prn})'), // Display name and PRN
+                        child: Text('${student.name} (${student.prn})'),
                       );
                     }).toList(),
                     onChanged: (Student? newValue) {
@@ -89,6 +120,21 @@ class _HomeTabViewState extends State<HomeTabView> {
                     },
                   ),
             const SizedBox(height: 20),
+            if (_showUrlInput) ...[
+              TextField(
+                controller: _urlController,
+                decoration: const InputDecoration(
+                  labelText: 'Enter new base URL',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: _updateBaseUrl,
+                child: const Text('Update Base URL'),
+              ),
+              const SizedBox(height: 20),
+            ],
             ElevatedButton(
               onPressed: _navigateToUpload,
               child: const Text('Add Student Image'),
