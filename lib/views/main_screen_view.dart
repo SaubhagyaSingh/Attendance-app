@@ -1,3 +1,5 @@
+import 'package:attendance_app/views/class_view.dart';
+import 'package:attendance_app/views/get_attendance_view.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'home_tab_view.dart';
@@ -20,9 +22,8 @@ class _MainScreenViewState extends State<MainScreenView> {
     super.initState();
     _tabs = [
       HomeTabView(camera: widget.camera),
-      PlaceholderTab(title: 'Tab 2'),
-      PlaceholderTab(title: 'Tab 3'),
-      PlaceholderTab(title: 'Tab 4'),
+      ClassView(camera: widget.camera),
+      GetAttendanceView(camera: widget.camera)
     ];
   }
 
@@ -38,10 +39,10 @@ class _MainScreenViewState extends State<MainScreenView> {
       body: _tabs[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Tab 2'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Tab 3'),
-          BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Tab 4'),
+          BottomNavigationBarItem(icon: Icon(Icons.camera), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.group), label: 'Class'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.check_box), label: 'Attendance'),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.blue,
