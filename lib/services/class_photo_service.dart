@@ -1,15 +1,15 @@
+import 'package:attendance_app/constants/constants.dart';
 import 'package:http/http.dart' as http;
 
 class ClassPhotoService {
-  static const String baseUrl = 'https://bxmgxsx0-8000.inc1.devtunnels.ms';
-
   Future<http.Response> uploadClassPhoto({
     required String roomId,
     required String date,
     required String time,
     required String imagePath,
   }) async {
-    final uri = Uri.parse('$baseUrl/upload/add_class_photo').replace(
+    final uri =
+        Uri.parse('${ApiConstants.baseUrl}/upload/add_class_photo').replace(
       queryParameters: {
         'room_id': roomId,
         'date': date,

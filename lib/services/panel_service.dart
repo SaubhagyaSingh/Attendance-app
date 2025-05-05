@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../constants/constants.dart';
 import '../models/panel_model.dart';
 
 class PanelService {
-  static const String baseUrl = 'https://bxmgxsx0-8000.inc1.devtunnels.ms';
-
   Future<List<Panel>> getPanels() async {
-    print('Calling API: $baseUrl/panels/get_all_panels'); // Debug
-    final response =
-        await http.get(Uri.parse('$baseUrl/panels/get_all_panels'));
+    print(
+        'Calling API: ${ApiConstants.baseUrl}/panels/get_all_panels'); // Debug
+    final response = await http
+        .get(Uri.parse('${ApiConstants.baseUrl}/panels/get_all_panels'));
     print('API response: ${response.statusCode} - ${response.body}'); // Debug
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);

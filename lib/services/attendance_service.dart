@@ -1,9 +1,8 @@
 import 'dart:convert';
+import 'package:attendance_app/constants/constants.dart';
 import 'package:http/http.dart' as http;
 
 class AttendanceService {
-  static const String baseUrl = 'https://bxmgxsx0-8000.inc1.devtunnels.ms';
-
   Future<http.Response> addAttendance({
     required String roomId,
     required String subjectId,
@@ -13,7 +12,7 @@ class AttendanceService {
     required String date,
     required String endTime,
   }) async {
-    final uri = Uri.parse('$baseUrl/upload/add_attendance');
+    final uri = Uri.parse('${ApiConstants.baseUrl}/upload/add_attendance');
     final body = jsonEncode({
       'room': roomId,
       'subject': subjectId,

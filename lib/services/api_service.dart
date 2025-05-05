@@ -1,13 +1,15 @@
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
+import '../constants/constants.dart';
+
 class ApiService {
   Future<http.StreamedResponse> uploadStudentFace({
     required String studentId,
     required File imageFile,
   }) async {
     var uri = Uri.parse(
-      'https://bxmgxsx0-8000.inc1.devtunnels.ms/upload/add_student_face?student_id=$studentId',
+      '${ApiConstants.baseUrl}${ApiConstants.uploadStudentFaceEndpoint}?student_id=$studentId',
     );
     var request = http.MultipartRequest('POST', uri);
 
@@ -23,7 +25,9 @@ class ApiService {
   }
 
   Future<http.StreamedResponse> getStudents() async {
-    var uri = Uri.parse('https://bxmgxsx0-8000.inc1.devtunnels.ms/students');
+    var uri = Uri.parse(
+      '${ApiConstants.baseUrl}${ApiConstants.getStudentsEndpoint}',
+    );
     var request = http.Request('GET', uri);
     return request.send();
   }
